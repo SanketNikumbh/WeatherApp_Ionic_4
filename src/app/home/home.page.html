@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title text-center>
+      Weather App
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-dropdown" pullingText="Pull to refresh" refreshingSpinner="circles"
+      refreshingText="Refreshing...">
+    </ion-refresher-content>
+  </ion-refresher>
+  <form #weatherForm="ngForm" novalidate>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="9">
+          <ion-item>
+            <ion-input (ionChange)="reset()" type="text" placeholder="Enter City" [(ngModel)]="city" name="cityName"
+              pattern="[a-zA-Z]*" required minlength="1"></ion-input>
+          </ion-item>
+        </ion-col>
+        <ion-col size="3">
+          <ion-button [disabled]="weatherForm.invalid" shape="outline" color="primary" size="small" fill="outline"
+            (click)="getWeather()">Submit</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+  <ion-grid *ngIf="weather">
+    <ion-row *ngIf="weather && weather.name && weather.sys && weather.sys.country">
+      <ion-col size="12">
+        <ion-card>
+          <ion-card-header>
+            <ion-card-subtitle>Weather at {{weather.name}}, {{weather.sys.country}}</ion-card-subtitle>
+          </ion-card-header>
+          <ion-card-content *ngIf="weather.weather">
+            <ion-item>
+              <ion-thumbnail slot="start">
+                <ion-img [src]="BASE_URL + weather.weather[0].icon + '.png'"></ion-img>
+              </ion-thumbnail>
+              <ion-label text-uppercase>{{weather.weather[0].main}}</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label>{{weather.weather[0].description}}</ion-label>
+            </ion-item>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <app-temperature-list *ngIf="weather" [inputWeather]="weather">
+        </app-temperature-list>
+        <!-- <ion-card>
+         
+          <ion-list>
+            <ion-item class="activated">
+              <ion-label>Temperature:&nbsp;{{weather.main.temp}}&deg;</ion-label>
+            </ion-item>
+            <ion-item class="activated">
+              <ion-label>Temperature Max: &nbsp;{{weather.main.temp_max}}&deg;</ion-label>
+            </ion-item>
+            <ion-item class="activated">
+              <ion-label>Temperature Min: &nbsp;{{weather.main.temp_min}}&deg;
+              </ion-label>
+            </ion-item>
+            <ion-item class="activated">
+              <ion-label>Relative Humidity:&nbsp;{{weather.main.humidity}}%
+              </ion-label>
+            </ion-item>
+            <ion-item class="activated">
+              <ion-label>Pressure: &nbsp;{{weather.main.pressure}}hpa</ion-label>
+            </ion-item>
+          </ion-list>
+</ion-card> -->
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>
